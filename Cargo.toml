@@ -1,0 +1,26 @@
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[package]
+name = "bulkmail"
+version = "0.1.0"
+authors = ["Giovanni Bassi <giggio@giggio.net>"]
+edition = "2018"
+# package
+
+[features]
+static = []
+
+[profile.release]
+lto = true
+
+[dependencies]
+clap = "2.33.3"
+csv = "1.1.6"
+handlebars = "4.1.1"
+lettre = { version = "0.10.0-rc.3", features = ["rustls-tls"] }
+lettre_email = "0.9.4"
+openssl = { version = "0.10.34", features = ["vendored"] }
+serde = { version = "1.0.126", features = ["derive"] }
+which = "4.1.0"
+
+[dev-dependencies]
+pretty_assertions = "0.7.2"

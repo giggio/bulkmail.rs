@@ -1,0 +1,77 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug bulkmail run",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--bin=bulkmail",
+                    "--package=bulkmail"
+                ],
+                "filter": {
+                    "name": "bulkmail",
+                    "kind": "bin"
+                }
+            },
+            "args": [
+                "run",
+                "-vs"
+            ],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug bulkmail alert",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--bin=bulkmail",
+                    "--package=bulkmail"
+                ],
+                "filter": {
+                    "name": "bulkmail",
+                    "kind": "bin"
+                }
+            },
+            "args": [
+                "alert",
+                "from@giggio.net",
+                "giggio@giggio.net",
+                "smtp.gmail.com:465",
+                "300",
+                "150",
+                "--count",
+                "3",
+                "--username",
+                "foo",
+                "--password",
+                "bar",
+                "--simulate",
+            ],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in executable 'bulkmail'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--bin=bulkmail",
+                    "--package=bulkmail"
+                ],
+                "filter": {
+                    "name": "bulkmail",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        }
+    ]
+}
