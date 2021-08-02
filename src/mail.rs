@@ -1,5 +1,6 @@
 use std::str;
 
+use lettre::message::header::ContentType;
 use lettre::transport::smtp::authentication::Credentials;
 use lettre::{Message, SmtpTransport, Transport};
 
@@ -15,7 +16,12 @@ fn get_mailer(smtp: &Smtp) -> Result<SmtpTransport, String> {
         })?
         .port(smtp.port);
     if let Some(credentials) = &smtp.credentials {
-        let creds = Credentials::new(credentials.username.clone(), credentials.password.clone());
+        let username = if let Some(username_from_options) = &credentials.username {
+            username_from_options
+        } else {
+            &smtp.email
+        };
+        let creds = Credentials::new(username.clone(), credentials.password.clone());
         smtp_transport_builder = smtp_transport_builder.credentials(creds);
     }
     Ok(smtp_transport_builder.build())
@@ -36,6 +42,7 @@ pub fn send_mail(
     } else {
         printlnv!("Preparing e-mail...");
         let email = Message::builder()
+            .header(ContentType::TEXT_HTML)
             .from(smtp.email.parse().map_err(|err| {
                 format!(
                     "Could not convert email for 'from' from text '{}'. Error: {}",

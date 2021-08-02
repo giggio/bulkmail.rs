@@ -71,20 +71,13 @@ impl Args {
                             .takes_value(true)
                             .index(4)
                             .required(true)
-                            .help("E-mail address to send the alert message from"),
-                    )
-                    .arg(
-                        Arg::with_name("email")
-                            .takes_value(true)
-                            .index(5)
-                            .required(true)
-                            .help("E-mail address to send the alert message to"),
+                            .help("E-mail address to send the message from"),
                     )
                     .arg(
                         Arg::with_name("smtp server")
                             .long("smtp")
                             .takes_value(true)
-                            .index(6)
+                            .index(5)
                             .required(true)
                             .help("SMTP server and port to use, use server:port")
                             .validator(|server_and_port| {
@@ -102,7 +95,7 @@ impl Args {
                         Arg::with_name("simulate")
                             .short("s")
                             .long("simulate")
-                            .help("Should write email to stdout instead of sending e-mail"),
+                            .help("Should write e-mail to stdout instead of sending e-mail"),
                     )
                     .arg(
                         Arg::with_name("username")
@@ -117,13 +110,12 @@ impl Args {
                             .short("p")
                             .long("password")
                             .takes_value(true)
-                            .requires("username")
                             .help("SMTP server password for authentication"),
                     ),
             )
             .subcommand(
                 SubCommand::with_name("write")
-                    .about("Runs the speed test.")
+                    .about("Writes the e-mails to a file.")
                     .arg(
                         Arg::with_name("csv_file_path")
                             .takes_value(true)
@@ -156,7 +148,7 @@ impl Args {
                         Arg::with_name("simulate")
                             .short("s")
                             .long("simulate")
-                            .help("Should simulate instead of running speed test"),
+                            .help("Should simulate files reads and writes instead of using actual files."),
                     ),
             )
     }
@@ -167,11 +159,9 @@ impl Args {
             let server = parts[0];
             let port = parts[1].parse::<u16>().ok()?;
             let credentials;
-            if let (Some(username), Some(password)) =
-                (args.value_of("username"), args.value_of("password"))
-            {
+            if let Some(password) = args.value_of("password") {
                 credentials = Some(Credentials {
-                    username: username.to_owned(),
+                    username: args.value_of("username").map(|u| u.to_owned()),
                     password: password.to_owned(),
                 });
             } else {
@@ -242,7 +232,7 @@ pub struct Smtp {
 
 #[derive(Debug)]
 pub struct Credentials {
-    pub username: String,
+    pub username: Option<String>,
     pub password: String,
 }
 
@@ -252,10 +242,21 @@ mod tests {
 
     #[test]
     fn args_run_simulated() {
-        let write = match Args::new_from(["bulkmail", "write", "--simulate"].iter())
-            .unwrap()
-            .command
-            .unwrap()
+        let write = match Args::new_from(
+            [
+                "bulkmail",
+                "write",
+                "/tmp/in.csv",
+                "A subject",
+                "/tmp/in.handlebars",
+                "/tmp/output.txt",
+                "--simulate",
+            ]
+            .iter(),
+        )
+        .unwrap()
+        .command
+        .unwrap()
         {
             Command::Send(_) => panic!("Should not be send"),
             Command::Write(write) => write,

@@ -17,10 +17,22 @@ This can be run on Linux for AMD64 and ARMv7.
 ## Quick Start
 
 You need to mount a volume somewhere, and the files will be read/writen there.
-Run it like this:
+Run it like this (example for Gmail):
 
 ````bash
-docker run --rm -ti -v `pwd`/data:/data giggio/bulkmail # arguments
+bulkmail send /path/to/input.csv "Subject here" /path/to/template.handlebars yourusername@gmail.com smtp.gmail.com:465 -u yourusername@gmail.com -p 'your password in here'
+````
+
+If the e-mail address is the same as the user you can omit it.
+
+````bash
+bulkmail send /path/to/input.csv "Subject here" /path/to/template.handlebars yourusername@gmail.com smtp.gmail.com:465 -p 'your password in here'
+````
+
+Or, in Docker:
+
+````bash
+docker run --rm -ti -v /path/to/files/:/data giggio/bulkmail # arguments
 ````
 
 ### Detailed commands

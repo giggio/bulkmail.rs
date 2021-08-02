@@ -17,7 +17,6 @@ clap = "2.33.3"
 csv = "1.1.6"
 handlebars = "4.1.1"
 lettre = { version = "0.10.0-rc.3", features = ["rustls-tls"] }
-lettre_email = "0.9.4"
 openssl = { version = "0.10.34", features = ["vendored"] }
 serde = { version = "1.0.126", features = ["derive"] }
 which = "4.1.0"

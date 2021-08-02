@@ -19,27 +19,29 @@ pub fn send(send: Send) -> Result<(), Option<String>> {
 }
 
 fn send_mails(mails: Vec<Mail>, simulate: bool, smtp: Smtp) -> Result<(), String> {
-    for mail_message in mails {
-        mail::send_mail(
-            simulate,
-            &mail_message.to,
-            &mail_message.subject,
-            &mail_message.body,
-            &smtp,
-        )?;
+    if simulate {
+        println!("----------------------");
     }
-    Ok(())
-}
-
-#[cfg(test)]
-mod tests {
-    mod xx {
-        use pretty_assertions::assert_eq;
-
-        use super::super::*;
-        #[test]
-        fn average_calculated_with_single_item() {
-            assert_eq!(true, true);
+    for mail_message in mails {
+        if simulate {
+            println!(
+                "Would send message:
+To: {}
+Subject: {}
+Body:
+{}
+----------------------",
+                &mail_message.to, &mail_message.subject, &mail_message.body
+            )
+        } else {
+            mail::send_mail(
+                simulate,
+                &mail_message.to,
+                &mail_message.subject,
+                &mail_message.body,
+                &smtp,
+            )?;
         }
     }
+    Ok(())
 }
