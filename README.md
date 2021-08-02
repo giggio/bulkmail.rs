@@ -2,7 +2,6 @@
 
 [![Docker Stars](https://img.shields.io/docker/stars/giggio/bulkmail.svg)](https://hub.docker.com/r/giggio/bulkmail/)
 [![Docker Pulls](https://img.shields.io/docker/pulls/giggio/bulkmail.svg)](https://hub.docker.com/r/giggio/bulkmail/)
-[![ImageLayers](https://images.microbadger.com/badges/image/giggio/bulkmail.svg)](https://microbadger.com/#/images/giggio/bulkmail)
 
 This app reads a csv file and sends an email with a formatted
 [Handlebars](https://handlebarsjs.com/) file.
@@ -54,7 +53,7 @@ docker run --rm giggio/bulkmail send --help
 This command has a simulated argument, which will make it not send the e-mail
 but write to stdout instead.
 
-#### Alerting
+#### Writing e-mails to a file
 
 To view available args run:
 
