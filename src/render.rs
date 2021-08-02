@@ -28,7 +28,6 @@ Other text..."
     let mut mails: Vec<Mail> = vec![];
     for destination in destinations.into_iter() {
         mails.push(Mail {
-            // to: destination.email_address.clone(),
             to: destination["email_address"].clone(),
             subject: subject.to_owned(),
             body: handlebars

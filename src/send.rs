@@ -19,29 +19,15 @@ pub fn send(send: Send) -> Result<(), Option<String>> {
 }
 
 fn send_mails(mails: Vec<Mail>, simulate: bool, smtp: Smtp) -> Result<(), String> {
-    if simulate {
-        println!("----------------------");
-    }
     for mail_message in mails {
-        if simulate {
-            println!(
-                "Would send message:
-To: {}
-Subject: {}
-Body:
-{}
-----------------------",
-                &mail_message.to, &mail_message.subject, &mail_message.body
-            )
-        } else {
-            mail::send_mail(
-                simulate,
-                &mail_message.to,
-                &mail_message.subject,
-                &mail_message.body,
-                &smtp,
-            )?;
-        }
+        println!("Sending message to: {}", &mail_message.to);
+        mail::send_mail(
+            simulate,
+            &mail_message.to,
+            &mail_message.subject,
+            &mail_message.body,
+            &smtp,
+        )?;
     }
     Ok(())
 }

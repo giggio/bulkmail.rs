@@ -35,8 +35,9 @@ pub fn send_mail(
     smtp: &Smtp,
 ) -> Result<(), String> {
     if simulate {
+        println!("----------------------");
         println!(
-            "--------------\nWould be sending e-mail message to: {}\nSubject: {}\nBody:\n{}\n--------------\n",
+            "Would be sending e-mail message to: {}\nSubject: {}\nBody:\n{}\n----------------------",
             email_address, subject, message_body
         );
     } else {

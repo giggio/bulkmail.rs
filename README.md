@@ -34,6 +34,16 @@ Or, in Docker:
 docker run --rm -ti -v /path/to/files/:/data giggio/bulkmail # arguments
 ````
 
+### Csv file details
+
+The csv file has to have a header, and at least one column titled `email_address`.
+See an example of a input file [here](https://github.com/giggio/bulkmail.rs/blob/main/test/input1.csv).
+
+### Template file details
+
+We are using Handlebars to render the message body. You can see an example that works with the above
+csv file [here](https://github.com/giggio/bulkmail.rs/blob/main/test/input1.handlebars).
+
 ### Detailed commands
 
 There are two commands: `send` and `write`. The former sends the message, the
