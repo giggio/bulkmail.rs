@@ -7,13 +7,8 @@ use crate::{
 };
 
 pub fn send(send: Send) -> Result<(), Option<String>> {
-    let destinations = get_destinations(&send.file_path, send.simulate)?;
-    let mails = render(
-        destinations,
-        &send.subject,
-        &send.template_file_path,
-        send.simulate,
-    )?;
+    let destinations = get_destinations(&send.file_path, false)?;
+    let mails = render(destinations, &send.subject, &send.template_file_path, false)?;
     send_mails(mails, send.simulate, send.smtp)?;
     Ok(())
 }
