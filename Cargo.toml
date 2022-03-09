@@ -1,10 +1,8 @@
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 [package]
 name = "bulkmail"
-version = "0.2.0"
+version = "0.2.1"
 authors = ["Giovanni Bassi <giggio@giggio.net>"]
-edition = "2018"
-# package
+edition = "2021"
 
 [features]
 static = []
@@ -13,12 +11,12 @@ static = []
 lto = true
 
 [dependencies]
-clap = "2.33.3"
+clap = "2.34"
 csv = "1.1.6"
 handlebars = "4.1.1"
-lettre = { version = "0.10.0-rc.3", features = ["rustls-tls"] }
-openssl = { version = "0.10.34", features = ["vendored"] }
-serde = { version = "1.0.126", features = ["derive"] }
+lettre = { version = "0.10.0-rc.4", features = ["rustls-tls"] }
+openssl = { version = "0.10", features = ["vendored"] }
+serde = { version = "1.0", features = ["derive"] }
 
 [dev-dependencies]
-pretty_assertions = "0.7.2"
+pretty_assertions = "1.1"
