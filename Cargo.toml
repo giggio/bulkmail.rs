@@ -19,7 +19,6 @@ handlebars = "4.1.1"
 lettre = { version = "0.10.0-rc.3", features = ["rustls-tls"] }
 openssl = { version = "0.10.34", features = ["vendored"] }
 serde = { version = "1.0.126", features = ["derive"] }
-which = "4.1.0"
 
 [dev-dependencies]
 pretty_assertions = "0.7.2"
