@@ -16,8 +16,7 @@ pub fn render(
                 "<p>Hello, {{ name }}!</p>
 <p>Email is: {{ email_address }}</p>
 <p>{{ other_property }}</p>
-Other text..."
-                    .to_owned(),
+Other text...",
             )
             .map_err(|err| format!("Error when parsing template: {}", err))?;
     } else {
@@ -27,6 +26,9 @@ Other text..."
     }
     let mut mails: Vec<Mail> = vec![];
     for destination in destinations.into_iter() {
+        if destination.get("email_address").is_none() {
+            return Err("Missing email_address field.".to_owned());
+        }
         mails.push(Mail {
             to: destination["email_address"].clone(),
             subject: subject.to_owned(),

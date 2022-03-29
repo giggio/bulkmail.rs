@@ -70,7 +70,7 @@ pub fn send_mail(
         let result = mailer.send(&email);
         if let Err(err) = result {
             printlnv!("E-mail message was NOT sent successfully.\nError:\n{}", err);
-            return Err("Could not send email.".to_owned());
+            return Err(format!("Could not send email. Details:\n{:?}", err));
         } else {
             printlnv!("E-mail message was sent successfully.");
         }

@@ -158,15 +158,10 @@ impl Args {
             let parts: Vec<&str> = server_and_port.split(':').collect();
             let server = parts[0];
             let port = parts[1].parse::<u16>().ok()?;
-            let credentials;
-            if let Some(password) = args.value_of("password") {
-                credentials = Some(Credentials {
-                    username: args.value_of("username").map(|u| u.to_owned()),
-                    password: password.to_owned(),
-                });
-            } else {
-                credentials = None;
-            }
+            let credentials = args.value_of("password").map(|password| Credentials {
+                username: args.value_of("username").map(|u| u.to_owned()),
+                password: password.to_owned(),
+            });
             let email = args.value_of("sender email")?;
             Some(Smtp {
                 email: email.to_owned(),
