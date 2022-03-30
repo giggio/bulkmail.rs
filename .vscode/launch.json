@@ -4,7 +4,7 @@
         {
             "type": "lldb",
             "request": "launch",
-            "name": "Debug bulkmail run",
+            "name": "Debug bulkmail send",
             "cargo": {
                 "args": [
                     "build",
@@ -17,15 +17,14 @@
                 }
             },
             "args": [
-                "run",
-                "-vs"
+                "send"
             ],
             "cwd": "${workspaceFolder}"
         },
         {
             "type": "lldb",
             "request": "launch",
-            "name": "Debug bulkmail alert",
+            "name": "Debug bulkmail write",
             "cargo": {
                 "args": [
                     "build",
@@ -38,19 +37,11 @@
                 }
             },
             "args": [
-                "alert",
-                "from@giggio.net",
-                "giggio@giggio.net",
-                "smtp.gmail.com:465",
-                "300",
-                "150",
-                "--count",
-                "3",
-                "--username",
-                "foo",
-                "--password",
-                "bar",
-                "--simulate",
+                "write",
+                "./file.csv",
+                "My Title",
+                "../file.handlebars",
+                "../emails.txt",
             ],
             "cwd": "${workspaceFolder}"
         },
