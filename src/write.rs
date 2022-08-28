@@ -5,6 +5,9 @@ use crate::{
     destinations::get_destinations,
     render::{render, Mail},
 };
+#[cfg(test)]
+use mockall::automock;
+use std::fmt::Write as _;
 
 #[cfg(windows)]
 const LINE_ENDING: &str = "\r\n";
@@ -19,27 +22,79 @@ pub fn write(write: Write) -> Result<(), Option<String>> {
         &write.template_file_path,
         write.simulate,
     )?;
-    write_mails(mails, &write.output_file_path, write.simulate)?;
+    write_mails(
+        &FileWriter {},
+        mails,
+        &write.output_file_path,
+        write.simulate,
+    )?;
     Ok(())
 }
 
-fn write_mails(mails: Vec<Mail>, file_path: &str, simulate: bool) -> Result<(), String> {
+fn write_mails(
+    writer: &dyn WritesFile,
+    mails: Vec<Mail>,
+    file_path: &str,
+    simulate: bool,
+) -> Result<(), String> {
     let mut text = String::new();
-    text.push_str(&format!("----------------------{}", LINE_ENDING));
+    let _ = write!(text, "----------------------{LINE_ENDING}");
     for mail in mails {
-        text.push_str(&format!(
-            "To: {}{}Subject: {}{}{}{}----------------------{}",
-            mail.to, LINE_ENDING, mail.subject, LINE_ENDING, mail.body, LINE_ENDING, LINE_ENDING
-        ));
+        let _ = write!(text, "To: {}{LINE_ENDING}Subject: {}{LINE_ENDING}{}{LINE_ENDING}----------------------{LINE_ENDING}",
+            mail.to, mail.subject, mail.body);
     }
     if simulate {
-        println!(
-            "Results would be writen to '{}' and are as follows:\n{}",
-            file_path, text
-        );
+        println!("Results would be writen to '{file_path}' and are as follows:\n{text}");
     } else {
-        fs::write(file_path, text)
-            .map_err(|err| format!("Could not write to output file: {}", err))?;
+        writer
+            .write(file_path, text)
+            .map_err(|err| format!("Could not write to output file: {err}"))?;
     }
     Ok(())
+}
+
+#[cfg_attr(test, automock)]
+trait WritesFile {
+    fn write(&self, file_path: &str, text: String) -> Result<(), std::io::Error>;
+}
+struct FileWriter {}
+impl WritesFile for FileWriter {
+    fn write(&self, file_path: &str, text: String) -> Result<(), std::io::Error> {
+        fs::write(file_path, text)
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn writes() {
+        let mut writer = MockWritesFile::new();
+        writer
+            .expect_write()
+            .withf(move |file_path, text| {
+                file_path == "my_path"
+                    && text
+                        == "----------------------
+To: a to
+Subject: a subject
+a body
+----------------------
+"
+            })
+            .times(1)
+            .return_once(|_, _| Ok(()));
+        let wrote = write_mails(
+            &writer,
+            vec![Mail {
+                body: "a body".to_string(),
+                subject: "a subject".to_string(),
+                to: "a to".to_string(),
+            }],
+            "my_path",
+            false,
+        );
+        assert!(wrote.is_ok());
+    }
 }
