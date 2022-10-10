@@ -1,6 +1,6 @@
 [package]
 name = "bulkmail"
-version = "0.2.2"
+version = "0.2.3"
 authors = ["Giovanni Bassi <giggio@giggio.net>"]
 edition = "2021"
 
